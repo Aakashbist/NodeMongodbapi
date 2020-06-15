@@ -8,10 +8,9 @@ const Joi = require('@hapi/joi');
 
 router.post('/register', async (req, res) => {
     //validation
-    console.log(req.body.name)
-    console.log(req.body)
+
     const { error } = registerValidation(req.body);
-    console.log(error);
+
     if (error) {
         return res.status(401).json({ message: error.details[0].message });
     }
@@ -50,15 +49,14 @@ router.post('/login', async (req, res) => {
     }
 
     const user = await User.findOne({ email: req.body.email })
-    if (!user) return res.status(200).json({
-
-        message: "Auth failed"
+    if (!user) return res.status(401).json({
+        message: "Email and password didn't match"
     });
 
     const validPassword = await bcrypt.compare(req.body.password, user.password)
     if (!validPassword) return res.status(401).json({
 
-        message: "failed"
+        message: "Email and password didn't match"
     });
 
     const token = jwt.sign(
@@ -67,7 +65,6 @@ router.post('/login', async (req, res) => {
 
     console.log(token);
     return res.status(200).json({
-        message: "sucessfull",
         token: token
     });
 

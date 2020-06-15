@@ -8,7 +8,7 @@ const noteSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    imgurl: {
+    imageUrl: {
         type: String,
         required: false
     },
@@ -16,7 +16,7 @@ const noteSchema = new mongoose.Schema({
         type: Number,
         required: false
     },
-    lon: {
+    lng: {
         type: Number,
         required: false
     },

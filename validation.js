@@ -18,5 +18,19 @@ const loginValidation = data => {
     });
     return schema.validate(data);
 }
+const notesValidation = data => {
+
+    const schema = Joi.object().keys({
+
+        address: Joi.string().required(),
+        description: Joi.string().min(4).required(),
+        imageUrl: Joi.string().required(),
+        lat: Joi.number().required(),
+        lng: Joi.number().required()
+    });
+    return schema.validate(data);
+}
+
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
+module.exports.notesValidation = notesValidation;
