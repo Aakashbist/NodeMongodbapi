@@ -21,7 +21,7 @@ router.post('/', verify, async (req, res) => {
         description: req.body.description,
         imageUrl: req.body.imageUrl,
         lat: req.body.lat,
-        lng: req.body.lon,
+        lng: req.body.lng,
         UserId: req.user._id,
     });
     try {
@@ -35,14 +35,59 @@ router.post('/', verify, async (req, res) => {
 });
 
 router.get('/:id/', verify, async (req, res) => {
-    const note = await Note.findById(req.params.id);
-    console.log(note)
-    if (!note) return res.status(404).json({
-        message: "Not found"
+
+    Note.findOne({ _id: req.params.id }, (err, post) => {
+        if (err) return res.status(404).json({
+            message: "Not found"
+        });
+
+        return res.status(200).json({
+            post: post
+        });
+    })
+
+});
+router.put('/:id/', verify, async (req, res) => {
+
+
+    var updatedNote = {
+        $set: {
+            address: req.body.address,
+            description: req.body.description,
+            imageUrl: req.body.imageUrl,
+            lat: req.body.lat,
+            lng: req.body.lng,
+            UserId: req.user._id,
+        }
+    };
+    Note.update({ _id: req.params.id }, updatedNote, function (err, result) {
+        if (err) {
+            return res.status(200).json({
+
+                message: err
+            });
+        } else {
+            return res.status(200).json({
+
+                message: "Notes updated Successfully"
+            });
+        }
     });
-    return res.status(404).json(
-        note
-    );
+});
+
+router.delete('/:id/', verify, async (req, res) => {
+
+    await Note.findOne({ _id: req.params.id }, (err, post) => {
+        if (err) return res.status(404).json({
+            message: "Not found"
+        });
+
+        post.remove();
+        return res.status(200).json({
+            message: "Note deleted successfully"
+        });
+    })
+
 });
 
 module.exports = router
