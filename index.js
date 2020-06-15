@@ -4,12 +4,13 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 
+dotenv.config();
 
 //import routes
 const authRoute = require('./routes/auth');
 const noteRoute = require('./routes/notes');
 const documentRoute = require('./routes/document')
-dotenv.config();
+
 
 //connect to db
 mongoose.connect(process.env.DB_CONNECT,

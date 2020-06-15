@@ -49,7 +49,6 @@ router.get('/:id/', verify, async (req, res) => {
 });
 router.put('/:id/', verify, async (req, res) => {
 
-
     var updatedNote = {
         $set: {
             address: req.body.address,
@@ -60,6 +59,7 @@ router.put('/:id/', verify, async (req, res) => {
             UserId: req.user._id,
         }
     };
+
     Note.update({ _id: req.params.id }, updatedNote, function (err, result) {
         if (err) {
             return res.status(200).json({
