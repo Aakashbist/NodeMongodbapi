@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const express = require('express');
-const verify = require('./verifyToken');
+const verify = require('../middleware/verifyToken');
 const Document = require('../model/Document');
 const multer = require('multer');
 
@@ -31,12 +31,14 @@ const upload = multer({
     fileFilter: fileFilter
 });
 router.post('/', verify, upload.single('Images'), async (req, res) => {
+    if (typeof req.fileSizeError != "undefined") {
+        res.send({ "error": "File too large" });// to display filesize error
+    }
     try {
-        console.log(req.file.path)
         res.json("http://localhost:3000/" + req.file.path)
     }
     catch (error) {
-        res.status(400).json(
+        res.status(401).json(
             "server error"
         );
     }

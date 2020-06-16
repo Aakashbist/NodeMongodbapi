@@ -1,14 +1,11 @@
 const router = require('express').Router();
-const verify = require('./verifyToken');
+const verify = require('../middleware/verifyToken');
+const pagination = require('../middleware/pagination')
 const Note = require('../model/Note');
 const { notesValidation } = require('../validation');
 
-router.get('/', verify, async (req, res) => {
-    Note.find({ UserId: req.user._id }, (err, posts) => {
-        return res.status(200).json(
-            posts
-        );
-    })
+router.get('/', verify, pagination(Note), async (req, res) => {
+    res.json(res.paginatedResult);
 })
 
 router.post('/', verify, async (req, res) => {
@@ -89,5 +86,6 @@ router.delete('/:id/', verify, async (req, res) => {
     })
 
 });
+
 
 module.exports = router
